@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import StarRating from "./StarRating";
 
 const tempMovieData = [
   {
@@ -56,52 +57,101 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const query = "bibiodsaoi";
-  useEffect(function () {
-    async function fetchMovies() {
-      try {
-        setIsLoading(true);
-        const res = await fetch(
-          `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
-        );
-        if (!res.ok)
-          throw new Error("Something went wrong with fetching movies");
-        const data = await res.json();
-        if (data.Response === "False") throw new Error("Movie not Found");
-        setMovies(data.Search);
-      } catch (err) {
-        console.error(`This is the error💣${err.message}`);
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
+  const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [selectedMovie, setSelectedMovie] = useState("");
+  console.log(`WHY ${selectedMovie}`);
+  function handleSelectedMovie(id) {
+    if (id === selectedId) {
+      setSelectedId(null);
+      setSelectedMovie("");
+    } else setSelectedId(id);
+  }
+  function handleCloseMovie() {
+    setSelectedId(null);
+  }
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          const res = await fetch(
+            ` http://www.omdbapi.com/?i=${selectedId}&apikey=4b81001`
+          );
+
+          if (!res.ok)
+            throw new Error("Something wrong with finding the movie detail");
+          const data = await res.json();
+          if (data.Response === "False")
+            throw new Error("can't find the movie");
+          setSelectedMovie(data);
+        } catch (err) {}
       }
-    }
-    fetchMovies();
-  }, []);
+      if (!selectedId) return;
+      fetchMovies();
+    },
+    [selectedId, selectedMovie]
+  );
+
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          setIsLoading(true);
+          setError("");
+          const res = await fetch(
+            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
+          );
+          if (!res.ok)
+            throw new Error("Something went wrong with fetching movies");
+          const data = await res.json();
+          if (data.Response === "False") throw new Error("Movie not Found");
+          setMovies(data.Search);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+      if (!query.length) {
+        setMovies([]);
+        setError("");
+        return;
+      }
+      fetchMovies();
+    },
+    [query]
+  );
 
   return (
     <>
       <NavBar>
         <Logo />
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
         <Box>
-          {/* {isLoading ? (
-            <Loader />
-          ) : error ? (
-            <ErrorMessage />
-          ) : (
-            <MovieList movies={movies} />
-          )} */}
           {isLoading && <Loader />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList
+              handleSelectedMovie={handleSelectedMovie}
+              movies={movies}
+            />
+          )}
           {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
-          <WatchedSummary watched={watched} />
-          <WatchedMovieList watched={watched} />
+          {selectedId ? (
+            <MovieDetails
+              handleCloseMovie={handleCloseMovie}
+              selectedMovie={selectedMovie}
+            />
+          ) : (
+            <Fragment>
+              <WatchedSummary watched={watched} />
+              <WatchedMovieList watched={watched} />
+            </Fragment>
+          )}
         </Box>
       </Main>
     </>
@@ -132,8 +182,7 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
@@ -157,19 +206,23 @@ function Main({ children }) {
   return <main className="main">{children}</main>;
 }
 
-function MovieList({ movies }) {
+function MovieList({ movies, handleSelectedMovie }) {
   return (
     <ul className="list">
       {movies?.map((movie) => (
-        <Movie movie={movie} key={movie.imdbID}></Movie>
+        <Movie
+          handleSelectedMovie={handleSelectedMovie}
+          movie={movie}
+          key={movie.imdbID}
+        ></Movie>
       ))}
     </ul>
   );
 }
 
-function Movie({ movie }) {
+function Movie({ movie, handleSelectedMovie }) {
   return (
-    <li>
+    <li onClick={() => handleSelectedMovie(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
@@ -193,6 +246,36 @@ function Box({ children }) {
         {isOpen ? "–" : "+"}
       </button>
       {isOpen && children}
+    </div>
+  );
+}
+
+function MovieDetails({ selectedMovie, handleCloseMovie }) {
+  return (
+    <div className="details">
+      <button className="btn-back" onClick={handleCloseMovie}>
+        ←
+      </button>
+      <header>
+        <img src={selectedMovie.Poster} alt={selectedMovie.Title} />
+        <div className="details-overview">
+          <h2>{selectedMovie.Title}</h2>
+          <p>
+            <span>{selectedMovie.Released}</span>
+            <span>{selectedMovie.Runtime}</span>
+          </p>
+          <p>{selectedMovie.Genre}</p>
+          <p>⭐ {selectedMovie.imdbRating} IMDB Rating</p>
+        </div>
+      </header>
+      <section>
+        <div className="rating">
+          <StarRating maxRating={10} color="#fcc419" size="24" />
+        </div>
+        <p>{selectedMovie.Plot}</p>
+        <p>Starring {selectedMovie.Actors}</p>
+        <p>Directed by {selectedMovie.Director}</p>
+      </section>
     </div>
   );
 }
