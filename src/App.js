@@ -59,38 +59,15 @@ export default function App() {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [selectedMovie, setSelectedMovie] = useState("");
-  console.log(`WHY ${selectedMovie}`);
+
   function handleSelectedMovie(id) {
     if (id === selectedId) {
       setSelectedId(null);
-      setSelectedMovie("");
     } else setSelectedId(id);
   }
   function handleCloseMovie() {
     setSelectedId(null);
   }
-  useEffect(
-    function () {
-      async function fetchMovies() {
-        try {
-          const res = await fetch(
-            ` http://www.omdbapi.com/?i=${selectedId}&apikey=4b81001`
-          );
-
-          if (!res.ok)
-            throw new Error("Something wrong with finding the movie detail");
-          const data = await res.json();
-          if (data.Response === "False")
-            throw new Error("can't find the movie");
-          setSelectedMovie(data);
-        } catch (err) {}
-      }
-      if (!selectedId) return;
-      fetchMovies();
-    },
-    [selectedId, selectedMovie]
-  );
 
   useEffect(
     function () {
@@ -144,7 +121,7 @@ export default function App() {
           {selectedId ? (
             <MovieDetails
               handleCloseMovie={handleCloseMovie}
-              selectedMovie={selectedMovie}
+              selectedId={selectedId}
             />
           ) : (
             <Fragment>
@@ -250,32 +227,69 @@ function Box({ children }) {
   );
 }
 
-function MovieDetails({ selectedMovie, handleCloseMovie }) {
+function MovieDetails({ selectedId, handleCloseMovie }) {
+  const [selectedMovie, setSelectedMovie] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        setIsLoading(true);
+        const res = await fetch(
+          ` http://www.omdbapi.com/?i=${selectedId}&apikey=4b81001`
+        );
+
+        if (!res.ok)
+          throw new Error("Something wrong with finding the movie detail");
+        const data = await res.json();
+        if (data.Response === "False") throw new Error("can't find the movie");
+        setIsLoading(false);
+        setSelectedMovie(data);
+      }
+      if (!selectedId) return;
+      fetchMovies();
+    },
+    [selectedId]
+  );
+
   return (
-    <div className="details">
-      <button className="btn-back" onClick={handleCloseMovie}>
-        ←
-      </button>
-      <header>
-        <img src={selectedMovie.Poster} alt={selectedMovie.Title} />
-        <div className="details-overview">
-          <h2>{selectedMovie.Title}</h2>
-          <p>
-            <span>{selectedMovie.Released}</span>
-            <span>{selectedMovie.Runtime}</span>
-          </p>
-          <p>{selectedMovie.Genre}</p>
-          <p>⭐ {selectedMovie.imdbRating} IMDB Rating</p>
+    <div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="details">
+          <header>
+            <button className="btn-back" onClick={handleCloseMovie}>
+              ←
+            </button>
+            <img
+              src={selectedMovie.Poster}
+              alt={`Poster of ${selectedMovie.Title}`}
+            />
+            <div className="details-overview">
+              <h2>{selectedMovie.Title}</h2>
+              <p>
+                <span>{selectedMovie.Released}</span>
+                <span>&bull;</span>
+                <span>{selectedMovie.Runtime}</span>
+              </p>
+              <p>{selectedMovie.Genre}</p>
+              <p>
+                <span>⭐</span> {selectedMovie.imdbRating} IMDB Rating
+              </p>
+            </div>
+          </header>
+          <section>
+            <div className="rating">
+              <StarRating maxRating={10} color="#fcc419" size="24" />
+            </div>
+            <p>
+              <em>{selectedMovie.Plot}</em>
+            </p>
+            <p>Starring {selectedMovie.Actors}</p>
+            <p>Directed by {selectedMovie.Director}</p>
+          </section>
         </div>
-      </header>
-      <section>
-        <div className="rating">
-          <StarRating maxRating={10} color="#fcc419" size="24" />
-        </div>
-        <p>{selectedMovie.Plot}</p>
-        <p>Starring {selectedMovie.Actors}</p>
-        <p>Directed by {selectedMovie.Director}</p>
-      </section>
+      )}
     </div>
   );
 }
