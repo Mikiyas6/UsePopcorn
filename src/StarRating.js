@@ -25,11 +25,13 @@ export default function StarRating({
   className = "",
   messages = [],
   defaultRating = 0,
+  handleUserRating,
 }) {
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
   function handleRating(id) {
     setRating(id);
+    handleUserRating(id);
   }
   const textStyle = {
     lineHeight: "1",
