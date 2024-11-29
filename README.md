@@ -1,70 +1,121 @@
-# Getting Started with Create React App
+# 🍿 usePopcorn - Movie Exploration and Management App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**usePopcorn** is a React-based web application that enables users to explore movies, rate them, and manage their watched movies list effortlessly. By leveraging the **OMDB API**, the app provides access to a vast database of movies, allowing users to find detailed information, such as genre, cast, director, ratings, and much more. This project was created as part of a course by Jonas Schmedtmann.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 📸 Screenshot
 
-### `npm start`
+![Steps Component](./public/usePopcorn.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🔗 Links
 
-### `npm test`
+- Github Repo: [Github-link](https://github.com/Mikiyas6/UsePopcorn)
+- Live Site URL: [Page-link](https://my-weather-forecast-dashboard.netlify.app/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 🌟 Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- 🔍 **Search for Movies**: Explore an extensive list of movies from the OMDB API using the search functionality.
+- ⭐ **Rate Movies**: Add your personal ratings to movies after watching them.
+- ✅ **Watched Movies List**: Maintain a list of movies you’ve watched, including runtime and user ratings.
+- 📊 **Summary Statistics**: View average IMDb ratings, user ratings, and runtime of all the movies you've watched.
+- 🎥 **Detailed Movie Info**: Fetch and display detailed information about a selected movie, including the plot, actors, and directors.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠️ Technologies Used
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **React**: For building the user interface.
+- **OMDB API**: For fetching movie data.
+- **Custom Hooks**: Includes hooks like `useMovies`, `useLocalStorageState`, and `useKey` to manage data and events efficiently.
+- **React Context**: For state and event management.
+- **CSS Modules**: For styling components.
 
-### `npm run eject`
+## ⚙️ Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/usePopcorn.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd usePopcorn
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm start
+   ```
+5. Open the app in your browser at `http://localhost:3000`.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🌐 API Integration
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+This app uses the [OMDB API](http://www.omdbapi.com/) to fetch movie data.  
+To use the application:
+1. Obtain your API key from the [OMDB API website](http://www.omdbapi.com/apikey.aspx).
+2. Replace the placeholder API key in the `MovieDetails` component with your API key:
+   ```javascript
+   const res = await fetch(
+     `http://www.omdbapi.com/?i=${selectedId}&apikey=your_api_key_here`
+   );
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🧩 Project Structure
 
-## Learn More
+```plaintext
+src
+├── components
+│   ├── App.js                # Main application component
+│   ├── MovieList.js          # Displays the list of movies
+│   ├── MovieDetails.js       # Displays detailed movie info
+│   ├── WatchedMovieList.js   # Manages the watched movies list
+│   └── StarRating.js         # Custom star rating component
+├── hooks
+│   ├── useMovies.js          # Fetches movies from OMDB API
+│   ├── useLocalStorageState.js  # Persists state to localStorage
+│   └── useKey.js             # Handles keypress events
+├── styles
+│   └── styles.css            # Global styles for the app
+└── index.js                  # Entry point of the application
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🎮 How to Use
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Use the search bar to find your favorite movies by title.
+2. Click on a movie to view its details, including plot, cast, and IMDb rating.
+3. Add the movie to your watched list after rating it.
+4. View the watched movies summary to analyze your movie-watching habits.
 
-### Code Splitting
+## ✨ Highlights
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **Dynamic UI**: Reactively updates as you interact with the app.
+- **Keyboard Shortcuts**: Use the `Enter` key to focus on the search bar or the `Escape` key to close movie details.
+- **Persistent Data**: Watched movies are stored in localStorage, ensuring your list remains even after refreshing the page.
 
-### Analyzing the Bundle Size
+## 🖼️ Screenshots
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Search and Explore Movies
+![Search and Explore](https://via.placeholder.com/800x400)
 
-### Making a Progressive Web App
+### Movie Details
+![Movie Details](https://via.placeholder.com/800x400)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Watched Movies Summary
+![Watched Summary](https://via.placeholder.com/800x400)
 
-### Advanced Configuration
+## 🚀 Future Enhancements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- 🎬 Add a feature to recommend similar movies based on genres.
+- 💾 Enable user accounts for personalized movie lists.
+- 🌍 Introduce support for multilingual movie details.
 
-### Deployment
+## 🧑‍💻 Author
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+This project was built by **Mikiyas Tewodroes** as part of Jonas Schmedtmann’s React course.  
+Feel free to connect with me on [LinkedIn](linkedin.com/in/mikiyas-teowodroes).
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
