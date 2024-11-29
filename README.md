@@ -13,7 +13,7 @@
 ## 🔗 Links
 
 - Github Repo: [Github-link](https://github.com/Mikiyas6/UsePopcorn)
-- Live Site URL: [Page-link](https://my-weather-forecast-dashboard.netlify.app/)
+- Live Site URL: [Page-link](https://usepopcornapp.netlify.app/)
 
 ---
 
