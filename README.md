@@ -6,7 +6,7 @@
 
 ## 📸 Screenshot
 
-![Steps Component](./public/usePopcorn.png)
+![usePopcorn](./public/usePopcorn.png)
 
 ---
 
@@ -100,13 +100,13 @@ src
 ## 🖼️ Screenshots
 
 ### Search and Explore Movies
-![Search and Explore](https://via.placeholder.com/800x400)
+![Search and Explore](./public/usePopcorn.png)
 
 ### Movie Details
-![Movie Details](https://via.placeholder.com/800x400)
+![Movie Details](./public/MovieDetails.png)
 
 ### Watched Movies Summary
-![Watched Summary](https://via.placeholder.com/800x400)
+![Watched Summary](./public/watched.png)
 
 ## 🚀 Future Enhancements
 
